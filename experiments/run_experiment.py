@@ -190,9 +190,12 @@ def main():
     feat_stats.to_csv(RESULTS / "factor_stats.csv", index=False)
     rule_stats.to_csv(RESULTS / "rule_stats.csv", index=False)
     score_dist.to_csv(RESULTS / "score_dist.csv", index=False)
-    write_report(args, uni, panel, doubler_rows, n_pos, n_neg,
-                 feat_stats, rule_stats, score_dist, market_series)
+    report = write_report(args, uni, panel, doubler_rows, n_pos, n_neg,
+                          feat_stats, rule_stats, score_dist, market_series)
     print("結果を experiments/results/ に保存しました。")
+    # Actions ログからも読めるよう全文を stdout に出力（結果コミットが権限で失敗しても確認可能）
+    print("\n" + "=" * 70 + "\nREPORT (full)\n" + "=" * 70)
+    print(report)
 
 
 def mann_whitney_auc(pos: np.ndarray, neg: np.ndarray) -> float:
@@ -226,7 +229,9 @@ def write_report(args, uni, panel, doubler_rows, n_pos, n_neg,
     lines.append("- abs_auc_lift 上位の要素を「本質的要素」として採用候補にする。")
     lines.append("- lift が正のルールは正例で当たりやすい＝有効。負/ゼロのルールは閾値見直し or 除外。")
     lines.append("- スコア分布で positive の方が高ければ、充足要素数によるランク付けが妥当。")
-    (RESULTS / "report.md").write_text("\n".join(lines), encoding="utf-8")
+    report = "\n".join(lines)
+    (RESULTS / "report.md").write_text(report, encoding="utf-8")
+    return report
 
 
 if __name__ == "__main__":

@@ -3,17 +3,26 @@ name: experiment
 # 仮説検証ハーネス (R4): フルネット環境で実データ実験を回し、結果をブランチにコミットする。
 # 手動起動 (workflow_dispatch)。0円（GitHub Actions 無料枠 / パブリックリポは無制限）。
 
+# push 起動: 実験ロジック/要素を変更したらフルネットで自動再検証する。
+# 結果コミットは GITHUB_TOKEN によるため再帰トリガーされない（GitHub 仕様）。
 on:
   workflow_dispatch:
     inputs:
       sample:
         description: "サンプル銘柄数 (0=全銘柄)"
         required: false
-        default: "400"
+        default: "500"
       seed:
         description: "乱数シード"
         required: false
         default: "42"
+  push:
+    branches:
+      - claude/jp-stock-doubling-analyzer-LcMHc
+    paths:
+      - "experiments/**"
+      - "src/stockfactor/**"
+      - ".github/workflows/experiment.yml"
 
 permissions:
   contents: write
@@ -45,8 +54,11 @@ jobs:
           python -c "from stockfactor import universe; df=universe.refresh(); print('universe rows', len(df))" || true
 
       - name: run experiment
+        env:
+          SAMPLE: ${{ github.event.inputs.sample || '500' }}
+          SEED: ${{ github.event.inputs.seed || '42' }}
         run: |
-          python experiments/run_experiment.py --sample ${{ github.event.inputs.sample }} --seed ${{ github.event.inputs.seed }}
+          python experiments/run_experiment.py --sample "$SAMPLE" --seed "$SEED"
 
       - name: Commit results
         run: |
@@ -56,6 +68,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "no changes"
           else
-            git commit -m "exp: update experiment results (sample=${{ github.event.inputs.sample }})"
+            git commit -m "exp: update experiment results [skip ci]"
             git push origin HEAD:${{ github.ref_name }}
           fi
