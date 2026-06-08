@@ -64,17 +64,26 @@ def compute_technical(df: pd.DataFrame, i: int | None = None) -> dict[str, float
         else np.nan
     )
 
+    win60 = close[max(0, i - 59) : i + 1]
+    range_60 = (win60.max() - win60.min()) / close[i] if close[i] > 0 else np.nan
+    dd_252 = close[i] / high_252 - 1.0 if high_252 > 0 else np.nan  # 52週高値からの下落率(<=0)
+
     return {
+        "ret_1m": _ret(close, i, 21),
         "ret_3m": _ret(close, i, 63),
         "ret_6m": _ret(close, i, 126),
         "ret_12m": _ret(close, i, 252),
         "dist_52w_high": close[i] / high_252 if high_252 > 0 else np.nan,  # 1.0=高値圏
+        "drawdown_252": dd_252,                       # 高値からの下落（押し目度）
+        "px_to_sma25": close[i] / sma25 if sma25 > 0 else np.nan,    # 25日線乖離(連続)
+        "px_to_sma200": close[i] / sma200 if sma200 > 0 else np.nan,
         "above_sma25": float(close[i] > sma25),
         "above_sma200": float(close[i] > sma200),
         "sma_aligned": float(sma25 > sma75 > sma200),  # パーフェクトオーダー
         "vol_ratio": vol_s / vol_l if vol_l > 0 else np.nan,  # 出来高急増
-        "atr_pct": _atr_pct(high, low, close, i, config.ATR_WINDOW),
-        "vcp": vcp,  # <1 = ボラ収縮
+        "atr_pct": _atr_pct(high, low, close, i, config.ATR_WINDOW),  # ボラティリティ
+        "range_60": range_60,                          # 直近60日の値幅(ボラの広さ)
+        "vcp": vcp,  # <1 = ボラ収縮 / >1 = 拡大
     }
 
 

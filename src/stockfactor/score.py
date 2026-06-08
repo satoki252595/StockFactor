@@ -22,38 +22,36 @@ class Rule:
     desc: str = ""
 
 
-# 初期カタログ（テクニカル・マクロは exp03 で検証→閾値/採用を更新）
+# データ検証で確定したカタログ（experiments/results/report.md・FINDINGS.md 参照）。
+# 重要: 日本の「半年2倍株」は米国流のモメンタム/ブレイク型では説明できず、
+# 「高ボラ × 高値から下落(押し目) × 出来高急増 × ボラ拡大」という反転型プロファイル。
+# テクニカルは実データで識別力を確認済み(validated=True)。ファンダは無料の過去点別データが
+# 無く過去検証できないためフォワード適用(validated=False)。マクロは識別力が弱く低ウェイト。
 RULES: list[Rule] = [
-    # --- テクニカル (R5) ---
-    Rule("near_52w_high", "technical", "dist_52w_high", ">=", 0.90, 1.0,
-         desc="52週高値の90%以上＝高値圏ブレイク準備"),
-    Rule("volume_surge", "technical", "vol_ratio", ">=", 1.5, 1.0,
-         desc="直近5日出来高が60日平均の1.5倍以上"),
-    Rule("sma_perfect_order", "technical", "sma_aligned", ">=", 1.0, 1.0,
-         desc="25>75>200 パーフェクトオーダー"),
-    Rule("uptrend_above_200", "technical", "above_sma200", ">=", 1.0, 1.0,
-         desc="200日線上"),
-    Rule("momentum_3m", "technical", "ret_3m", ">=", 0.10, 1.0,
-         desc="3カ月で+10%以上の初動"),
-    Rule("vol_contraction", "technical", "vcp", "<=", 0.85, 1.0,
-         desc="直近ボラが収縮（VCP的）"),
-    Rule("rel_strength", "technical", "rs_6m", ">=", 0.0, 1.0,
-         desc="TOPIX相対で6Mアウトパフォーム"),
-    # --- マクロ (R6) ---
-    Rule("market_uptrend", "macro", "mkt_above_200", ">=", 1.0, 1.0,
-         desc="市場(TOPIX)が200日線上"),
-    Rule("smallcap_leadership", "macro", "growth_minus_mkt_6m", ">=", 0.0, 1.0,
-         desc="小型株が市場を6Mで上回る"),
-    # --- ファンダ×ミクロ (R7) current snapshot ---
-    Rule("small_cap", "fundamental", "small_cap", ">=", 1.0, 1.0,
+    # --- テクニカル (R5) 実データ検証済み ---
+    Rule("high_volatility", "technical", "atr_pct", ">=", 0.040, 2.0, True,
+         desc="ATR%が高い（最強の識別子, AUC0.81）。動ける銘柄"),
+    Rule("off_highs", "technical", "dist_52w_high", "<=", 0.80, 1.5, True,
+         desc="52週高値の80%以下＝高値から下落・出遅れ位置から反転（AUC0.33=強い逆相関）"),
+    Rule("volume_surge", "technical", "vol_ratio", ">=", 1.30, 1.5, True,
+         desc="直近5日出来高が60日平均の1.3倍以上＝点火の出来高(lift+0.20)"),
+    Rule("below_sma25", "technical", "px_to_sma25", "<=", 1.00, 1.0, True,
+         desc="25日線の下＝押し目/底値圏から発火"),
+    Rule("vol_expansion", "technical", "vcp", ">=", 1.00, 1.0, True,
+         desc="直近ボラが拡大（収縮ではない, AUC0.61）"),
+    # --- マクロ (R6) 識別力弱→低ウェイト ---
+    Rule("smallcap_leadership", "macro", "growth_minus_mkt_6m", ">=", 0.0, 0.3, False,
+         desc="小型株が市場を6Mで上回る（本サンプルでは識別力弱）"),
+    # --- ファンダ×ミクロ (R7) current snapshot・過去検証不可(フォワード適用) ---
+    Rule("small_cap", "fundamental", "small_cap", ">=", 1.0, 1.0, False,
          desc="時価総額500億円未満（伸びしろ）"),
-    Rule("revenue_growth", "fundamental", "revenue_growth", ">=", 0.15, 1.0,
+    Rule("revenue_growth", "fundamental", "revenue_growth", ">=", 0.15, 1.0, False,
          desc="増収率15%以上"),
-    Rule("earnings_growth", "fundamental", "earnings_growth", ">=", 0.20, 1.0,
+    Rule("earnings_growth", "fundamental", "earnings_growth", ">=", 0.20, 0.8, False,
          desc="増益率20%以上"),
-    Rule("high_roe", "fundamental", "roe", ">=", 0.10, 1.0,
+    Rule("high_roe", "fundamental", "roe", ">=", 0.10, 0.5, False,
          desc="ROE 10%以上"),
-    Rule("undervalued_growth", "fundamental", "psr", "<=", 5.0, 1.0,
+    Rule("undervalued_growth", "fundamental", "psr", "<=", 5.0, 0.5, False,
          desc="PSR 5倍以下（割高でない成長）"),
 ]
 
