@@ -77,18 +77,22 @@ MACRO_RULES: list[Rule] = [
          desc="小型株が市場を6Mで上回る（識別力弱）"),
 ]
 
-# === ファンダ×ミクロ（snapshot/PIT・フォワード適用。両型共通の質）===
+# === ファンダ×ミクロ（年次PITで過去検証済み・R12）===
+# 重要: 直近doubler(n=133-241)でファンダ識別力を実測したところ、「割安・高収益・高成長の
+# クオリティ株が2倍」という通説はデータで支持されない/逆だった（FINDINGS.md）。
+#   - small_cap のみ弱く支持（小型がdoubler, market_cap AUC0.44 / lift0.026）→ 低ウェイトで残す
+#   - revenue/earnings growth は無情報（AUC0.50/0.48）→ ウェイト最小化
+#   - high_roe(AUC0.44) と低PSR志向(高PSRがdoubler, AUC0.62) は逆効果 → 加点しない/最小化
+# 日本の2倍株はファンダ薄・テクニカル主導。ファンダは順位を歪めない補助フィルタに留める。
 FUNDAMENTAL_RULES: list[Rule] = [
-    Rule("small_cap", "fundamental", "small_cap", ">=", 1.0, 1.0, False, "fundamental",
-         desc="時価総額500億円未満（伸びしろ）"),
-    Rule("revenue_growth", "fundamental", "revenue_growth", ">=", 0.15, 1.0, False, "fundamental",
-         desc="増収率15%以上"),
-    Rule("earnings_growth", "fundamental", "earnings_growth", ">=", 0.20, 0.8, False, "fundamental",
-         desc="増益率20%以上"),
-    Rule("high_roe", "fundamental", "roe", ">=", 0.10, 0.5, False, "fundamental",
-         desc="ROE 10%以上"),
-    Rule("undervalued_growth", "fundamental", "psr", "<=", 5.0, 0.5, False, "fundamental",
-         desc="PSR 5倍以下（割高でない成長）"),
+    Rule("small_cap", "fundamental", "small_cap", ">=", 1.0, 0.5, True, "fundamental",
+         desc="時価総額500億円未満。PIT検証で弱く支持(小型がdoubler, lift0.026)"),
+    Rule("revenue_growth", "fundamental", "revenue_growth", ">=", 0.15, 0.3, False, "fundamental",
+         desc="増収率15%以上。PIT検証では無情報(AUC0.50)→最小ウェイトの参考"),
+    Rule("earnings_growth", "fundamental", "earnings_growth", ">=", 0.20, 0.3, False, "fundamental",
+         desc="増益率20%以上。PIT検証では無情報(AUC0.48)→最小ウェイトの参考"),
+    Rule("not_overvalued", "fundamental", "psr", "<=", 20.0, 0.2, False, "fundamental",
+         desc="PSR20倍以下＝極端な割高のみ排除。低PSR志向は逆効果(高PSRがdoubler)のため緩い上限に変更"),
 ]
 
 # 全ルール（後方互換: 旧 RULES を参照するコード向け）。
