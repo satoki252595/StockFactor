@@ -10,6 +10,7 @@ GitHub Actions から実行。Notion REST API を直接叩く（無料）。
   - 同一日付が既に投入済みならスキップ（冪等。--force で再投入）。
   - Notion のレート制限(約3 req/s)に合わせて送信。
   - NOTION_TOKEN 未設定なら何もせず正常終了（未設定ユーザーでも日次ジョブが落ちない）。
+  - 各行に「分析」= バフェット・コードの企業分析ページURLを付与（コードから自動生成）。
 
 使い方:
   PYTHONPATH=src python -m stockfactor.notion_sync --top 30
@@ -30,6 +31,7 @@ NOTION_API = "https://api.notion.com/v1"
 NOTION_VERSION = "2022-06-28"
 # 既定の投入先（ページ「小型成長株の推し銘柄」配下に作成した DB）
 DEFAULT_DB_ID = "9fd9f15ee2f24371844e2a5f8d6a5433"
+BUFFETT_CODE_URL = "https://www.buffett-code.com/company/{code}"  # 銘柄コード→分析ページ
 
 
 def _headers(token: str) -> dict:
@@ -60,11 +62,14 @@ def _num(row: dict, key: str):
 def _row_to_properties(row: dict, date: str) -> dict:
     hits = [h for h in (row.get("hits") or "").split(";") if h]
     name = (row.get("name") or row.get("ticker") or "")[:200]
+    code = str(row.get("ticker", "")).replace(".T", "")
     return {
         "銘柄": {"title": [{"text": {"content": name}}]},
         "日付": {"date": {"start": date}},
-        "コード": {"rich_text": [{"text": {"content": str(row.get("ticker", "")).replace(".T", "")}}]},
+        "コード": {"rich_text": [{"text": {"content": code}}]},
         "ティッカー": {"rich_text": [{"text": {"content": row.get("ticker", "")}}]},
+        # バフェット・コードの企業分析ページへ直リンク（クリックでそのまま分析）
+        "分析": {"url": BUFFETT_CODE_URL.format(code=code) if code else None},
         "業種": {"rich_text": [{"text": {"content": (row.get("sector") or "")[:200]}}]},
         "終値": {"number": _num(row, "close")},
         "要素数": {"number": _num(row, "n_factors")},
