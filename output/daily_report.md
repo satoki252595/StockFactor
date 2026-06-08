@@ -1,0 +1,43 @@
+# 日次スクリーニング 2026-06-09
+
+- ユニバース取得: 300 銘柄 / 流動性通過 203 / ファンダ採点 80
+- 採点要素数(満点): 12（テクニカル/マクロ/ファンダ）
+
+## 総合スコア上位（本質的要素の充足数）
+
+| ticker   | name          | sector   |   close |   n_factors |   weighted |   tech |   macro |   funda | hits                                                                                                                                                  |
+|:---------|:--------------|:---------|--------:|------------:|-----------:|-------:|--------:|--------:|:------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 146A.T   | コロンビア・ワークス    | 不動産業     |  2585   |          11 |       11.3 |      6 |       1 |       4 | high_volatility;off_highs;volume_surge;below_sma25;vol_expansion;recent_dip;smallcap_leadership;small_cap;revenue_growth;high_roe;undervalued_growth  |
+| 2130.T   | メンバーズ         | サービス業    |  1022   |          11 |       11.1 |      6 |       1 |       4 | high_volatility;off_highs;volume_surge;below_sma25;vol_expansion;recent_dip;smallcap_leadership;small_cap;earnings_growth;high_roe;undervalued_growth |
+| 219A.T   | Ｈｅａｒｔｓｅｅｄ     | 医薬品      |  1620   |          10 |       11.1 |      6 |       1 |       3 | high_volatility;off_highs;volume_surge;below_sma25;vol_expansion;recent_dip;smallcap_leadership;small_cap;revenue_growth;earnings_growth              |
+| 2158.T   | ＦＲＯＮＴＥＯ       | サービス業    |   582   |          10 |        9.8 |      5 |       1 |       4 | high_volatility;off_highs;below_sma25;vol_expansion;recent_dip;smallcap_leadership;small_cap;revenue_growth;high_roe;undervalued_growth               |
+| 1434.T   | ＪＥＳＣＯホールディングス | 建設業      |  1900   |          10 |        9.6 |      4 |       1 |       5 | high_volatility;off_highs;below_sma25;recent_dip;smallcap_leadership;small_cap;revenue_growth;earnings_growth;high_roe;undervalued_growth             |
+| 194A.T   | ＷＯＬＶＥＳ　ＨＡＮＤ   | サービス業    |  1215   |          10 |        9.6 |      4 |       1 |       5 | high_volatility;off_highs;below_sma25;recent_dip;smallcap_leadership;small_cap;revenue_growth;earnings_growth;high_roe;undervalued_growth             |
+| 2332.T   | クエスト          | 情報・通信業   |  1760   |          10 |        9.1 |      4 |       1 |       5 | high_volatility;below_sma25;vol_expansion;recent_dip;smallcap_leadership;small_cap;revenue_growth;earnings_growth;high_roe;undervalued_growth         |
+| 160A.T   | アズパートナーズ      | サービス業    |  1991   |          10 |        8.6 |      4 |       1 |       5 | off_highs;below_sma25;vol_expansion;recent_dip;smallcap_leadership;small_cap;revenue_growth;earnings_growth;high_roe;undervalued_growth               |
+| 2326.T   | デジタルアーツ       | 情報・通信業   |  3700   |           9 |        9.3 |      5 |       1 |       3 | high_volatility;off_highs;volume_surge;below_sma25;recent_dip;smallcap_leadership;small_cap;high_roe;undervalued_growth                               |
+| 1827.T   | ナカノフドー建設      | 建設業      |  1174   |           9 |        9.1 |      4 |       1 |       4 | high_volatility;off_highs;below_sma25;recent_dip;smallcap_leadership;small_cap;revenue_growth;earnings_growth;undervalued_growth                      |
+| 1447.T   | ＳＡＡＦホールディングス  | 建設業      |   288   |           9 |        8.8 |      4 |       1 |       4 | high_volatility;off_highs;below_sma25;recent_dip;smallcap_leadership;small_cap;revenue_growth;high_roe;undervalued_growth                             |
+| 1491.T   | 中外鉱業          | 非鉄金属     |   676   |           9 |        8.8 |      4 |       1 |       4 | high_volatility;off_highs;below_sma25;recent_dip;smallcap_leadership;small_cap;revenue_growth;high_roe;undervalued_growth                             |
+| 1435.T   | ｒｏｂｏｔ　ｈｏｍｅ    | 不動産業     |   161   |           9 |        8.8 |      4 |       1 |       4 | high_volatility;off_highs;below_sma25;recent_dip;smallcap_leadership;small_cap;revenue_growth;high_roe;undervalued_growth                             |
+| 1515.T   | 日鉄鉱業          | 鉱業       |  2249   |           9 |        8.6 |      5 |       1 |       3 | high_volatility;off_highs;below_sma25;vol_expansion;recent_dip;smallcap_leadership;earnings_growth;high_roe;undervalued_growth                        |
+| 1803.T   | 清水建設          | 建設業      |  2429   |           9 |        8.6 |      5 |       1 |       3 | high_volatility;off_highs;below_sma25;vol_expansion;recent_dip;smallcap_leadership;earnings_growth;high_roe;undervalued_growth                        |
+| 1921.T   | 巴コーポレーション     | 建設業      |  1790   |           9 |        8.6 |      5 |       1 |       3 | off_highs;volume_surge;below_sma25;vol_expansion;recent_dip;smallcap_leadership;revenue_growth;earnings_growth;undervalued_growth                     |
+| 1980.T   | ダイダン          | 建設業      |  2394   |           9 |        8.6 |      5 |       1 |       3 | high_volatility;off_highs;below_sma25;vol_expansion;recent_dip;smallcap_leadership;earnings_growth;high_roe;undervalued_growth                        |
+| 1893.T   | 五洋建設          | 建設業      |  1604.5 |           9 |        8.6 |      5 |       1 |       3 | high_volatility;off_highs;below_sma25;vol_expansion;recent_dip;smallcap_leadership;earnings_growth;high_roe;undervalued_growth                        |
+| 1942.T   | 関電工           | 建設業      |  5745   |           9 |        8.6 |      5 |       1 |       3 | high_volatility;off_highs;below_sma25;vol_expansion;recent_dip;smallcap_leadership;earnings_growth;high_roe;undervalued_growth                        |
+| 1885.T   | 東亜建設工業        | 建設業      |  2130   |           9 |        8.6 |      5 |       1 |       3 | high_volatility;off_highs;below_sma25;vol_expansion;recent_dip;smallcap_leadership;earnings_growth;high_roe;undervalued_growth                        |
+| 1925.T   | 大和ハウス工業       | 建設業      |  4249   |           9 |        8.1 |      5 |       1 |       3 | off_highs;volume_surge;below_sma25;vol_expansion;recent_dip;smallcap_leadership;earnings_growth;high_roe;undervalued_growth                           |
+| 2303.T   | ドーン           | 情報・通信業   |  1214   |           9 |        8.1 |      4 |       1 |       4 | high_volatility;below_sma25;vol_expansion;recent_dip;smallcap_leadership;small_cap;earnings_growth;high_roe;undervalued_growth                        |
+| 1384.T   | ホクリヨウ         | 水産・農林業   |  2082   |           9 |        7.8 |      4 |       1 |       4 | off_highs;below_sma25;vol_expansion;recent_dip;smallcap_leadership;small_cap;revenue_growth;high_roe;undervalued_growth                               |
+| 153A.T   | カウリス          | 情報・通信業   |  1362   |           8 |        8.3 |      5 |       1 |       2 | high_volatility;off_highs;below_sma25;vol_expansion;recent_dip;smallcap_leadership;small_cap;high_roe                                                 |
+| 141A.T   | トライアルホールディングス | 小売業      |  2782   |           8 |        8.3 |      5 |       1 |       2 | high_volatility;off_highs;below_sma25;vol_expansion;recent_dip;smallcap_leadership;revenue_growth;undervalued_growth                                  |
+| 1443.T   | 技研ホールディングス    | 建設業      |   228   |           8 |        8.3 |      5 |       1 |       2 | high_volatility;off_highs;below_sma25;vol_expansion;recent_dip;smallcap_leadership;small_cap;undervalued_growth                                       |
+| 198A.T   | ＰｏｓｔＰｒｉｍｅ     | 情報・通信業   |   144   |           8 |        8.3 |      5 |       1 |       2 | high_volatility;off_highs;below_sma25;vol_expansion;recent_dip;smallcap_leadership;small_cap;undervalued_growth                                       |
+| 149A.T   | シンカ           | 情報・通信業   |   742   |           8 |        8.3 |      4 |       1 |       3 | high_volatility;off_highs;below_sma25;recent_dip;smallcap_leadership;small_cap;revenue_growth;undervalued_growth                                      |
+| 1514.T   | 住石ホールディングス    | 鉱業       |   577   |           8 |        8.3 |      4 |       1 |       3 | high_volatility;off_highs;below_sma25;recent_dip;smallcap_leadership;small_cap;revenue_growth;undervalued_growth                                      |
+| 1711.T   | ＳＤＳホールディングス   | 建設業      |   222   |           8 |        8.3 |      4 |       1 |       3 | high_volatility;off_highs;below_sma25;recent_dip;smallcap_leadership;small_cap;revenue_growth;undervalued_growth                                      |
+
+## 次のステップ（Claude スキルが実施）
+- 上位銘柄について SKILL.md の要素定義に沿って定性的に妥当性を確認し、
+  最終ウォッチリストと根拠を `output/watchlist_<date>.md` にまとめる。
