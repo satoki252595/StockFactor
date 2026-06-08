@@ -84,6 +84,29 @@ git add data/universe.csv && git commit -m "chore: refresh universe"
 
 合計ランニングコスト: **0 円**。
 
+## Notion へ結果を自動投入（日次・データベース化）
+
+日次ジョブが結果を Notion データベースへ日付ごとに格納する（`src/stockfactor/notion_sync.py`）。
+投入先 DB は作成済み:「**StockFactor 日次スクリーニング結果**」（ページ「小型成長株の推し銘柄」配下）。
+DB ID は既定でコードに埋め込み済みなので、**ユーザーが用意するのは `NOTION_TOKEN` だけ**。
+
+### 初回セットアップ（1回だけ）
+1. **インテグレーション作成**: https://www.notion.so/my-integrations → **New integration**（Internal）→
+   作成後の **Internal Integration Secret**（`ntn_...`）をコピー。
+2. **DB をインテグレーションに共有**: 上記データベースを開く → 右上 **•••** → **Connections（接続）** →
+   作成したインテグレーションを追加（これをしないと API から書き込めない）。
+3. **GitHub Secrets に登録**: リポジトリ → Settings → Secrets and variables → Actions → **New repository secret**
+   - `NOTION_TOKEN` = 手順1のシークレット
+   - （任意）`NOTION_DB_ID` = 別DBに送りたい場合のみ。未設定なら既定DBに送る。
+
+これで日次ワークフローが毎日、上位30銘柄を Notion DB に `日付` 付きで追加する（同一日付は二重投入しない冪等設計）。
+`NOTION_TOKEN` 未設定でもジョブは落ちず、Notion 投入だけスキップする。
+
+### DB スキーマ
+`銘柄`(タイトル) / `日付` / `コード` / `ティッカー` / `業種` / `終値` / `要素数` / `加重スコア` /
+`テクニカル` / `マクロ` / `ファンダ` / `該当要素`(マルチセレクト=検証済み要素)。
+Notion 側で `日付` でグループ化したビューや、`該当要素` でのフィルタが可能。
+
 ## 代替: GitHub Actions で日次実行（スケジュールを Claude に依存したくない場合）
 
 `.github/workflows/experiment.yml` と同様に `schedule:` トリガーの daily ワークフローを作れば、

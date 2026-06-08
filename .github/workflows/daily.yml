@@ -59,6 +59,12 @@ jobs:
           LIMIT: ${{ github.event.inputs.limit || (github.event_name == 'push' && '300' || '0') }}
         run: python run_daily.py --limit "$LIMIT"
 
+      - name: Upload to Notion database
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NOTION_DB_ID: ${{ secrets.NOTION_DB_ID }}   # 任意。未設定なら既定DBを使用
+        run: PYTHONPATH=src python -m stockfactor.notion_sync --top 30
+
       - name: Archive dated copy (history)
         run: |
           d=$(date +%F)
