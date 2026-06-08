@@ -1,0 +1,79 @@
+name: daily-screening
+
+# 日次スクリーニング自動化 (R10/R12): 平日の市場引け後に run_daily.py を回し、
+# 結果(output/)をリポジトリにコミットする。完全無料(GitHub Actions)・フルネットなので
+# yfinance/JPX に到達でき、Claude Code 側のネットワーク許可リスト設定は不要。
+#
+# 重要: schedule トリガーは「デフォルトブランチ上のワークフロー」しか発火しないため、
+# このファイルは main に置く必要がある。
+
+on:
+  schedule:
+    - cron: "0 9 * * 1-5"   # 平日 18:00 JST (= 09:00 UTC) 市場引け後
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: "銘柄数 (0=全銘柄, 動作確認は300など)"
+        required: false
+        default: "0"
+  push:                      # daily.yml を更新した時のスモークテスト用(feature branchのみ)
+    branches:
+      - claude/jp-stock-doubling-analyzer-LcMHc
+    paths:
+      - ".github/workflows/daily.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-screening
+  cancel-in-progress: false
+
+jobs:
+  screen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      TZ: Asia/Tokyo
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Refresh universe (JPX) if missing
+        run: |
+          if [ ! -f data/universe.csv ]; then
+            PYTHONPATH=src python -c "from stockfactor import universe; print('universe', len(universe.refresh()))"
+          fi
+
+      - name: Run daily screening
+        env:
+          LIMIT: ${{ github.event.inputs.limit || (github.event_name == 'push' && '300' || '0') }}
+        run: python run_daily.py --limit "$LIMIT"
+
+      - name: Archive dated copy (history)
+        run: |
+          d=$(date +%F)
+          mkdir -p output/history
+          cp output/daily_scores.csv "output/history/scores_${d}.csv"
+          cp output/daily_report.md  "output/history/report_${d}.md"
+
+      - name: Commit results
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -f output/daily_scores.csv output/daily_report.md output/history/
+          if git diff --cached --quiet; then
+            echo "no changes"
+          else
+            git commit -m "daily: screening results $(date +%F) [skip ci]"
+            git push origin HEAD:${{ github.ref_name }}
+          fi
