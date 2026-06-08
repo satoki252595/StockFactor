@@ -1,11 +1,9 @@
 name: daily-screening
 
 # 日次スクリーニング自動化 (R10/R12): 平日の市場引け後に run_daily.py を回し、
-# 結果(output/)をリポジトリにコミットする。完全無料(GitHub Actions)・フルネットなので
-# yfinance/JPX に到達でき、Claude Code 側のネットワーク許可リスト設定は不要。
+# 結果を Notion DB へ投入＋リポジトリにコミットする。完全無料(GitHub Actions)・フルネット。
 #
-# 重要: schedule トリガーは「デフォルトブランチ上のワークフロー」しか発火しないため、
-# このファイルは main に置く必要がある。
+# 重要: schedule トリガーは「デフォルトブランチ上のワークフロー」しか発火しないため main に置く。
 
 on:
   schedule:
@@ -53,6 +51,12 @@ jobs:
         env:
           LIMIT: ${{ github.event.inputs.limit || '0' }}
         run: python run_daily.py --limit "$LIMIT"
+
+      - name: Upload to Notion database
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NOTION_DB_ID: ${{ secrets.NOTION_DB_ID }}   # 任意。未設定なら既定DBを使用
+        run: PYTHONPATH=src python -m stockfactor.notion_sync --top 30
 
       - name: Archive dated copy (history)
         run: |
