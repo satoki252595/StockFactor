@@ -352,10 +352,16 @@ def main():
     print("\n統計計算中...")
     feat_stats, rule_stats = compute_stats(pos_df, neg_df)
 
-    def _nf(row):
-        return score_features(row.to_dict())["n_factors"]
-    pos_df["n_factors"] = pos_df.apply(_nf, axis=1)
-    neg_df["n_factors"] = neg_df.apply(_nf, axis=1)
+    def _score(row):
+        s = score_features(row.to_dict())
+        return pd.Series({
+            "n_factors": s["n_factors"],
+            "setup_type": s["setup_type"],
+            "rev_score": s["reversal_score"],
+            "mom_score": s["momentum_score"],
+        })
+    pos_df = pd.concat([pos_df, pos_df.apply(_score, axis=1)], axis=1)
+    neg_df = pd.concat([neg_df, neg_df.apply(_score, axis=1)], axis=1)
     score_dist = pd.DataFrame({
         "stat": ["mean", "median", "p25", "p75"],
         "positive": [pos_df.n_factors.mean(), pos_df.n_factors.median(),
@@ -363,6 +369,21 @@ def main():
         "negative": [neg_df.n_factors.mean(), neg_df.n_factors.median(),
                      neg_df.n_factors.quantile(.25), neg_df.n_factors.quantile(.75)],
     })
+    # 2トラック検証: setup_type別の正例/負例比率、各トラックスコアのAUC
+    setup_dist = pd.DataFrame({
+        "setup_type": ["momentum", "reversal"],
+        "pos_count": [int((pos_df.setup_type == "momentum").sum()),
+                      int((pos_df.setup_type == "reversal").sum())],
+        "neg_count": [int((neg_df.setup_type == "momentum").sum()),
+                      int((neg_df.setup_type == "reversal").sum())],
+    })
+    setup_dist["pos_ratio"] = (setup_dist.pos_count / max(1, len(pos_df))).round(3)
+    setup_dist["neg_ratio"] = (setup_dist.neg_count / max(1, len(neg_df))).round(3)
+    # 各トラックスコアの識別力（primaryスコア = max(rev, mom)）
+    pos_primary = pos_df[["rev_score", "mom_score"]].max(axis=1).values
+    neg_primary = neg_df[["rev_score", "mom_score"]].max(axis=1).values
+    track_auc = mann_whitney_auc(pos_primary, neg_primary)
+    setup_dist.attrs["primary_auc"] = round(track_auc, 3)
 
     print("クラスター分析中（モメンタム型 vs 反転型）...")
     cluster_df = cluster_analysis(pos_df)
@@ -373,19 +394,22 @@ def main():
     feat_stats.to_csv(RESULTS / "factor_stats.csv", index=False)
     rule_stats.to_csv(RESULTS / "rule_stats.csv", index=False)
     score_dist.to_csv(RESULTS / "score_dist.csv", index=False)
+    setup_dist.to_csv(RESULTS / "setup_type_dist.csv", index=False)
     pos_df.to_csv(RESULTS / "pos_features.csv", index=False)
     if not cluster_df.empty:
         cluster_df.to_csv(RESULTS / "cluster_analysis.csv")
 
     report = write_report(args, uni, panel, all_doublers, n_pos, n_neg,
-                          feat_stats, rule_stats, score_dist, cluster_df, market_series)
+                          feat_stats, rule_stats, score_dist, cluster_df, market_series,
+                          setup_dist)
     print("\n結果を experiments/results/ に保存しました。")
     print("\n" + "=" * 70 + "\nREPORT (full)\n" + "=" * 70)
     print(report)
 
 
 def write_report(args, uni, panel, doublers, n_pos, n_neg,
-                 feat_stats, rule_stats, score_dist, cluster_df, market_series):
+                 feat_stats, rule_stats, score_dist, cluster_df, market_series,
+                 setup_dist=None):
     n_dbl_tickers = len({d["ticker"] for d in doublers})
     lines = [
         "# 実験レポート v2: 2倍株の本質的要素 全銘柄検証\n",
@@ -403,9 +427,20 @@ def write_report(args, uni, panel, doublers, n_pos, n_neg,
         feat_stats.to_markdown(index=False),
         "\n## ルール命中率 lift (pos − neg)",
         rule_stats.to_markdown(index=False),
-        "\n## スコア分布 (充足要素数)",
+        "\n## スコア分布 (primary充足要素数)",
         score_dist.to_markdown(index=False),
     ]
+
+    if setup_dist is not None and not setup_dist.empty:
+        primary_auc = setup_dist.attrs.get("primary_auc", "?")
+        lines += [
+            "\n## 2トラック検証: setup_type 別分布",
+            f"- primary score (max(反転,モメンタム)) の AUC = **{primary_auc}**",
+            "- pos_ratio: 正例におけるその型の割合 / neg_ratio: 負例での割合",
+            setup_dist.to_markdown(index=False),
+            "\n**解釈**: 正例のモメンタム型比率が無視できない大きさなら、",
+            "  反転型のみの旧設計では取りこぼしていたことの証拠。",
+        ]
 
     if not cluster_df.empty:
         lines += [
