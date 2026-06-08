@@ -35,6 +35,21 @@ yfinance / JPX を使うため、routine が使う環境のネットワークを
 設定場所: クラウド環境の編集ダイアログ → **Network access** セレクタ。
 （参考: https://code.claude.com/docs/en/claude-code-on-the-web#network-access ）
 
+### 具体的なクリック手順（ブラウザが確実。デスクトップアプリ単体の画面には出ない）
+1. ブラウザで **https://claude.ai/code/routines** を開く
+2. ルーティンを作成（**New routine**）または既存を開いて **鉛筆アイコン（Edit routine）**
+3. **Instructions 入力欄の下**にある、環境名が表示された**クラウドアイコン**（例: **Default**）をクリック
+4. 一覧で対象環境に**マウスを乗せると右側に出る歯車（設定）アイコン**をクリック
+5. **「Update cloud environment」**ダイアログで **Network access** を設定:
+   - 手軽に動かすなら **Full**（全許可、これ1つでOK）
+   - 絞るなら **Custom** → **Allowed domains** に上記ドメインを貼り付け、
+     **「Also include default list of common package managers」にチェック**（pip用）
+6. **Save changes**（次回実行から有効）
+
+> 補足: このクラウドアイコン→歯車は「ルーティン編集時」または「クラウドセッション開始時」にのみ表示される。
+> デスクトップでもよいが **Routines → New routine → 「Remote」** を選ぶと同じ環境アイコンが現れる（Localは不可）。
+> ブロック時はログに `403 host_not_allowed` が出る → ドメイン追加か `Full` に変更。
+
 ## スケジュール（routine）の設定
 
 1. Claude Code Web で本リポジトリ・ブランチを対象に routine を作成。
