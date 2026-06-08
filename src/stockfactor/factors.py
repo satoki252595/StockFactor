@@ -212,34 +212,21 @@ def compute_fundamental(info: dict) -> dict[str, float]:
     }
 
 
-_DISCLOSURE_LAG_DAYS = 50  # 期末から開示まで典型的な遅延（日本: 45〜60日）
+_DISCLOSURE_LAG_DAYS = 50      # 四半期: 期末から開示まで（日本: 45〜60日）
+_DISCLOSURE_LAG_ANNUAL = 60   # 本決算: 期末から開示まで（日本: 期末後2カ月以内）
 
 
-def build_quarterly_pit(ticker_obj) -> pd.DataFrame | None:
-    """yfinance Ticker から四半期 point-in-time ファンダ表を構築する。
-
-    yfinance の quarterly_income_stmt 列は期末日。日本企業の典型的開示遅延
-    （期末 + 約50日）を加算して DisclosedDate を近似する。
-    返り値: DataFrame[DisclosedDate, net_sales, op_profit, net_profit, roe_approx]
-    """
-    try:
-        inc = ticker_obj.quarterly_income_stmt
-        bs = ticker_obj.quarterly_balance_sheet
-    except Exception:
-        return None
-    if inc is None or inc.empty:
-        return None
-
-    # カラム = 期末日（Timestamp）
-    period_ends = inc.columns.tolist()
+def _extract_pit_rows(inc, bs, lag_days: int, period_type: str) -> list[dict]:
+    """income_stmt / balance_sheet（列=期末日）から PIT 行を抽出する共通処理。"""
+    if inc is None or getattr(inc, "empty", True):
+        return []
     rows = []
-    for pe in period_ends:
+    for pe in inc.columns.tolist():
         if not isinstance(pe, pd.Timestamp):
             try:
                 pe = pd.Timestamp(pe)
             except Exception:
                 continue
-        disclosed = pe + pd.Timedelta(days=_DISCLOSURE_LAG_DAYS)
 
         def _get_row(df, *labels):
             for lbl in labels:
@@ -253,17 +240,41 @@ def build_quarterly_pit(ticker_obj) -> pd.DataFrame | None:
         op_profit = _get_row(inc, "Operating Income", "Operating Profit", "EBIT")
         net_profit = _get_row(inc, "Net Income", "Net Income Common Stockholders")
         total_eq = _get_row(bs, "Stockholders Equity", "Total Equity Gross Minority Interest",
-                             "Common Stock Equity") if bs is not None and not bs.empty else np.nan
-
+                             "Common Stock Equity")
         rows.append({
             "period_end": pe,
-            "disclosed_date": disclosed,
+            "disclosed_date": pe + pd.Timedelta(days=lag_days),
             "net_sales": net_sales,
             "op_profit": op_profit,
             "net_profit": net_profit,
             "total_equity": total_eq,
+            "period_type": period_type,
         })
+    return rows
 
+
+def build_quarterly_pit(ticker_obj) -> pd.DataFrame | None:
+    """yfinance Ticker から point-in-time ファンダ表を構築する（年次主軸＋四半期）。
+
+    yfinance の annual income_stmt は約5年分の期末データを返す（quarterly は5四半期のみ）。
+    年次は期末が約1年間隔なので YoY 成長率を正確に計算できる。両者を統合し、
+    日本企業の典型的開示遅延（年次+60日 / 四半期+50日）で DisclosedDate を近似する。
+    返り値: DataFrame[period_end, disclosed_date, net_sales, op_profit, net_profit,
+                      total_equity, period_type]
+    """
+    try:
+        a_inc = ticker_obj.income_stmt
+        a_bs = ticker_obj.balance_sheet
+    except Exception:
+        a_inc, a_bs = None, None
+    try:
+        q_inc = ticker_obj.quarterly_income_stmt
+        q_bs = ticker_obj.quarterly_balance_sheet
+    except Exception:
+        q_inc, q_bs = None, None
+
+    rows = _extract_pit_rows(a_inc, a_bs, _DISCLOSURE_LAG_ANNUAL, "annual")
+    rows += _extract_pit_rows(q_inc, q_bs, _DISCLOSURE_LAG_DAYS, "quarter")
     if not rows:
         return None
     df = pd.DataFrame(rows).sort_values("disclosed_date").reset_index(drop=True)
@@ -283,13 +294,28 @@ def compute_fundamental_pit(
     """
     if pit_df is None or pit_df.empty:
         return {}
+    if "period_type" not in pit_df.columns:
+        pit_df = pit_df.assign(period_type="quarter")
     avail = pit_df[pit_df["disclosed_date"] <= as_of]
     if avail.empty:
         return {}
 
-    latest = avail.iloc[-1]
-    # 前年同期（約4四半期前 = 330日以上前）
-    prev_rows = avail[avail["period_end"] <= (latest["period_end"] - pd.Timedelta(days=330))]
+    # 年次（フルイヤー）を優先：YoY が正確で売上の桁も一貫。無ければ四半期にフォールバック。
+    # 年次・四半期は売上規模が異なるため、必ず同じ period_type 内で比較する。
+    annual = avail[avail["period_type"] == "annual"]
+    if len(annual) >= 1:
+        same = annual
+        sales_per_year = 1.0   # 年次売上はそのまま年商
+        yoy_days = 200         # 年次の前期 = 約1年前（200日超で十分に分離）
+    else:
+        same = avail[avail["period_type"] == "quarter"]
+        if same.empty:
+            return {}
+        sales_per_year = 4.0   # 四半期売上 × 4 = 年商換算
+        yoy_days = 330         # 前年同期 = 約4四半期前
+
+    latest = same.iloc[-1]
+    prev_rows = same[same["period_end"] <= (latest["period_end"] - pd.Timedelta(days=yoy_days))]
     prev = prev_rows.iloc[-1] if not prev_rows.empty else None
 
     def _s(row, col):
@@ -309,10 +335,16 @@ def compute_fundamental_pit(
     rev_g = (ns / pns - 1.0) if (np.isfinite(ns) and np.isfinite(pns) and pns > 0) else np.nan
     op_g = (op / pop - 1.0) if (np.isfinite(op) and np.isfinite(pop) and pop > 0) else np.nan
     pft_g = (pft / ppft - 1.0) if (np.isfinite(pft) and np.isfinite(ppft) and ppft > 0) else np.nan
-    roe = (pft / eq) if (np.isfinite(pft) and np.isfinite(eq) and eq > 0) else np.nan
+    # ROE: 年次は通期純益/equity。四半期は単期純益×4/equity で年率近似。
+    # sales_per_year（年次=1.0 / 四半期=4.0）がそのまま年率換算係数になる。
+    pft_annualized = pft * sales_per_year
+    roe = (pft_annualized / eq) if (np.isfinite(pft_annualized) and np.isfinite(eq) and eq > 0) else np.nan
     op_margin = (op / ns) if (np.isfinite(op) and np.isfinite(ns) and ns > 0) else np.nan
-    # 時価総額 / 売上高（PSR近似）
-    psr_pit = (mcap_at_date / (ns * 4)) if (np.isfinite(mcap_at_date) and np.isfinite(ns) and ns > 0) else np.nan
+    # 時価総額 / 年商（PSR近似）
+    annual_sales = ns * sales_per_year
+    psr_pit = (mcap_at_date / annual_sales) if (np.isfinite(mcap_at_date) and np.isfinite(annual_sales) and annual_sales > 0) else np.nan
+
+    small_cap = float(mcap_at_date < 50_000_000_000) if np.isfinite(mcap_at_date) else np.nan
 
     return {
         "pit_rev_growth": rev_g,
@@ -321,4 +353,6 @@ def compute_fundamental_pit(
         "pit_roe": roe,
         "pit_op_margin": op_margin,
         "pit_psr": psr_pit,
+        "pit_market_cap": mcap_at_date if np.isfinite(mcap_at_date) else np.nan,
+        "pit_small_cap": small_cap,
     }

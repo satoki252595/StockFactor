@@ -65,19 +65,27 @@ def market_context():
 # point-in-time ファンダ（yfinance quarterly）
 # ---------------------------------------------------------------------------
 
-def _build_pit_cache(tickers: list[str]) -> dict[str, pd.DataFrame | None]:
-    """全ティッカーの quarterly PIT テーブルを事前ビルド（並列）。"""
+def _build_pit_cache(tickers: list[str], workers: int = 3,
+                     sleep_sec: float = 0.15) -> dict[str, pd.DataFrame | None]:
+    """全ティッカーの PIT テーブル（年次+四半期）を事前ビルド。
+
+    財務諸表の取得は価格より重いため、Yahoo に負荷をかけないよう並列数を抑え
+    （既定3）、各取得後に小休止（既定0.15秒）を挟む。
+    """
+    import time
     import yfinance as yf
 
     def _fetch(t):
         try:
             ticker_obj = yf.Ticker(t)
-            return t, factors.build_quarterly_pit(ticker_obj)
+            pit = factors.build_quarterly_pit(ticker_obj)
+            time.sleep(sleep_sec)   # レート制限回避の小休止
+            return t, pit
         except Exception:
             return t, None
 
     cache: dict[str, pd.DataFrame | None] = {}
-    with ThreadPoolExecutor(max_workers=16) as ex:
+    with ThreadPoolExecutor(max_workers=workers) as ex:
         futs = {ex.submit(_fetch, t): t for t in tickers}
         done = 0
         for f in as_completed(futs):
