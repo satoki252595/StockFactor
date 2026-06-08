@@ -14,6 +14,14 @@ def _import_yf():
     return yf
 
 
+def _normalize(df: pd.DataFrame) -> pd.DataFrame:
+    """インデックスを tz-naive に統一（銘柄ごとに tz 有無が混在するのを防ぐ）。"""
+    if isinstance(df.index, pd.DatetimeIndex) and df.index.tz is not None:
+        df = df.copy()
+        df.index = df.index.tz_localize(None)
+    return df
+
+
 def fetch_ohlcv(
     ticker: str,
     period: str = "5y",
@@ -28,7 +36,7 @@ def fetch_ohlcv(
             df = yf.Ticker(ticker).history(period=period, interval=interval, auto_adjust=True)
             if df is not None and not df.empty:
                 df = df.rename(columns=str.title)
-                return df[["Open", "High", "Low", "Close", "Volume"]].dropna()
+                return _normalize(df[["Open", "High", "Low", "Close", "Volume"]].dropna())
         except Exception:
             pass
         time.sleep(delay)
@@ -75,7 +83,7 @@ def fetch_many(
             if df is None or df.empty:
                 df = fetch_ohlcv(t, period=period, interval=interval)  # 個別フォールバック
             if df is not None and not df.empty:
-                out[t] = df
+                out[t] = _normalize(df)
         time.sleep(pause)
     return out
 
