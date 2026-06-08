@@ -1,0 +1,61 @@
+name: experiment
+
+# 仮説検証ハーネス (R4): フルネット環境で実データ実験を回し、結果をブランチにコミットする。
+# 手動起動 (workflow_dispatch)。0円（GitHub Actions 無料枠 / パブリックリポは無制限）。
+
+on:
+  workflow_dispatch:
+    inputs:
+      sample:
+        description: "サンプル銘柄数 (0=全銘柄)"
+        required: false
+        default: "400"
+      seed:
+        description: "乱数シード"
+        required: false
+        default: "42"
+
+permissions:
+  contents: write
+
+jobs:
+  experiment:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      PYTHONPATH: src
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: exp01 feasibility
+        run: python experiments/exp01_data_feasibility.py || true
+
+      - name: refresh universe (JPX)
+        run: |
+          python -c "from stockfactor import universe; df=universe.refresh(); print('universe rows', len(df))" || true
+
+      - name: run experiment
+        run: |
+          python experiments/run_experiment.py --sample ${{ github.event.inputs.sample }} --seed ${{ github.event.inputs.seed }}
+
+      - name: Commit results
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -f data/universe.csv experiments/results/ || true
+          if git diff --cached --quiet; then
+            echo "no changes"
+          else
+            git commit -m "exp: update experiment results (sample=${{ github.event.inputs.sample }})"
+            git push origin HEAD:${{ github.ref_name }}
+          fi
