@@ -4,6 +4,8 @@ __pycache__/
 venv/
 .DS_Store
 output/*.csv
-output/*.md
+output/daily_report.md
 !output/.gitkeep
+!output/watchlist_*.md
 .cache/
+experiments/results/run_log*.txt
