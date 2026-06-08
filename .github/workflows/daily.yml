@@ -56,7 +56,7 @@ jobs:
 
       - name: Run daily screening
         env:
-          LIMIT: ${{ github.event.inputs.limit || (github.event_name == 'push' && '300' || '0') }}
+          LIMIT: ${{ github.event.inputs.limit || '0' }}
         run: python run_daily.py --limit "$LIMIT"
 
       - name: Upload to Notion database

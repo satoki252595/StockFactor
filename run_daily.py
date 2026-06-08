@@ -100,6 +100,13 @@ def main():
             "macro": sc["by_group"].get("macro", 0),
             "funda": sc["by_group"].get("fundamental", 0),
             "hits": ";".join(sc["hits"]),
+            # レポート用のファンダ実数（時価総額は億円, 比率は小数）
+            "mcap_oku": round(feats["market_cap"] / 1e8, 1)
+                        if feats.get("market_cap") and feats["market_cap"] == feats["market_cap"] else "",
+            "rev_growth": feats.get("revenue_growth", ""),
+            "eps_growth": feats.get("earnings_growth", ""),
+            "roe": feats.get("roe", ""),
+            "psr": feats.get("psr", ""),
         })
     out = pd.DataFrame(full).sort_values(["n_factors", "weighted"], ascending=False).reset_index(drop=True)
 
