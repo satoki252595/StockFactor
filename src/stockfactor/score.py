@@ -39,6 +39,8 @@ RULES: list[Rule] = [
          desc="25日線の下＝押し目/底値圏から発火"),
     Rule("vol_expansion", "technical", "vcp", ">=", 1.00, 1.0, True,
          desc="直近ボラが拡大（収縮ではない, AUC0.61）"),
+    Rule("recent_dip", "technical", "ret_1m", "<=", 0.00, 1.0, True,
+         desc="直近1カ月は下落/投げ＝反転直前の capitulation（AUC0.37, 中央値-8%）"),
     # --- マクロ (R6) 識別力弱→低ウェイト ---
     Rule("smallcap_leadership", "macro", "growth_minus_mkt_6m", ">=", 0.0, 0.3, False,
          desc="小型株が市場を6Mで上回る（本サンプルでは識別力弱）"),
