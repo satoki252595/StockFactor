@@ -1,0 +1,10 @@
+rule,group,feature,op,threshold,pos_hit_rate,neg_hit_rate,lift
+volume_surge,technical,vol_ratio,>=,1.5,0.305,0.105,0.2
+smallcap_leadership,macro,growth_minus_mkt_6m,>=,0.0,0.287,0.274,0.014
+momentum_3m,technical,ret_3m,>=,0.1,0.335,0.323,0.013
+rel_strength,technical,rs_6m,>=,0.0,0.521,0.529,-0.008
+sma_perfect_order,technical,sma_aligned,>=,1.0,0.431,0.448,-0.017
+market_uptrend,macro,mkt_above_200,>=,1.0,0.647,0.775,-0.128
+uptrend_above_200,technical,above_sma200,>=,1.0,0.497,0.632,-0.135
+vol_contraction,technical,vcp,<=,0.85,0.287,0.426,-0.138
+near_52w_high,technical,dist_52w_high,>=,0.9,0.222,0.437,-0.216
