@@ -1,7 +1,8 @@
 name: daily-screening
 
 # 日次スクリーニング自動化 (R10/R12): 平日の市場引け後に run_daily.py を回し、
-# 結果を Notion DB へ投入＋リポジトリにコミットする。完全無料(GitHub Actions)・フルネット。
+# 生スコアDB と レポートDB の両方へ Notion 投入＋リポジトリにコミットする。
+# 完全無料(GitHub Actions)・フルネット・ローカルPC不要・LLM不要。
 #
 # 重要: schedule トリガーは「デフォルトブランチ上のワークフロー」しか発火しないため main に置く。
 
@@ -52,11 +53,17 @@ jobs:
           LIMIT: ${{ github.event.inputs.limit || '0' }}
         run: python run_daily.py --limit "$LIMIT"
 
-      - name: Upload to Notion database
+      - name: Upload raw scores to Notion (per-stock DB)
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
-          NOTION_DB_ID: ${{ secrets.NOTION_DB_ID }}   # 任意。未設定なら既定DBを使用
+          NOTION_DB_ID: ${{ secrets.NOTION_DB_ID }}            # 任意。未設定なら既定DB
         run: PYTHONPATH=src python -m stockfactor.notion_sync --top 30
+
+      - name: Upload ranking report to Notion (report DB)
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NOTION_REPORT_DB_ID: ${{ secrets.NOTION_REPORT_DB_ID }}  # 任意。未設定なら既定DB
+        run: PYTHONPATH=src python -m stockfactor.report_sync --top 10
 
       - name: Archive dated copy (history)
         run: |
