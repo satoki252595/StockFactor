@@ -4,7 +4,7 @@ GitHub Actions から実行。Notion REST API を直接叩く（無料）。
 必要な環境変数:
   - NOTION_TOKEN : Notion 内部インテグレーションのシークレット（GitHub Secrets に登録）
 任意:
-  - NOTION_DB_ID : 投入先データベースID（既定 = 作成済みDB）
+  - NOTION_DB_ID : 投入先データベースID（未設定/空なら既定の作成済みDBを使用）
 
 設計:
   - 同一日付が既に投入済みならスキップ（冪等。--force で再投入）。
@@ -110,7 +110,8 @@ def main() -> int:
     args = ap.parse_args()
 
     token = os.environ.get("NOTION_TOKEN")
-    db_id = os.environ.get("NOTION_DB_ID", DEFAULT_DB_ID)
+    # 空文字(secret未設定で空が渡る場合)も既定DBにフォールバックする
+    db_id = os.environ.get("NOTION_DB_ID") or DEFAULT_DB_ID
     if not token:
         print("NOTION_TOKEN 未設定のため Notion 連携をスキップしました。")
         return 0
