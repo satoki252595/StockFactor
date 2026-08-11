@@ -54,6 +54,7 @@ jobs:
         run: python run_daily.py --limit "$LIMIT"
 
       - name: Upload raw scores to Notion (per-stock DB)
+        continue-on-error: true   # Notion側の一時的なタイムアウト等でスコアのコミット自体を止めない
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
           NOTION_DB_ID: ${{ secrets.NOTION_DB_ID }}            # 任意。未設定なら既定DB
