@@ -42,13 +42,34 @@ def _headers(token: str) -> dict:
     }
 
 
+def _request_with_retry(method: str, url: str, *, headers: dict, json_body: dict, retries: int = 3):
+    """タイムアウト/接続エラー/429を吸収してリトライする。全滅時は最後の例外を送出。"""
+    last_exc: Exception | None = None
+    for attempt in range(retries):
+        try:
+            r = requests.request(method, url, headers=headers, json=json_body, timeout=30)
+        except (requests.exceptions.Timeout, requests.exceptions.ConnectionError) as exc:
+            last_exc = exc
+            time.sleep(2 * (attempt + 1))
+            continue
+        if r.status_code == 429:  # レート制限
+            time.sleep(2 * (attempt + 1))
+            continue
+        return r
+    raise last_exc  # type: ignore[misc]
+
+
 def _already_uploaded(db_id: str, token: str, date: str) -> bool:
-    r = requests.post(
-        f"{NOTION_API}/databases/{db_id}/query",
-        headers=_headers(token),
-        json={"filter": {"property": "日付", "date": {"equals": date}}, "page_size": 1},
-        timeout=30,
-    )
+    try:
+        r = _request_with_retry(
+            "POST",
+            f"{NOTION_API}/databases/{db_id}/query",
+            headers=_headers(token),
+            json_body={"filter": {"property": "日付", "date": {"equals": date}}, "page_size": 1},
+        )
+    except (requests.exceptions.Timeout, requests.exceptions.ConnectionError) as exc:
+        print(f"WARNING: 重複チェックに失敗（{exc}）。投入を続行します。")
+        return False
     return r.status_code == 200 and len(r.json().get("results", [])) > 0
 
 
@@ -87,16 +108,16 @@ def upload(csv_path: str, db_id: str, token: str, date: str, top: int) -> int:
     ok = 0
     for row in rows:
         body = {"parent": {"database_id": db_id}, "properties": _row_to_properties(row, date)}
-        for attempt in range(3):
-            r = requests.post(f"{NOTION_API}/pages", headers=_headers(token), json=body, timeout=30)
-            if r.status_code in (200, 201):
-                ok += 1
-                break
-            if r.status_code == 429:  # レート制限
-                time.sleep(2 * (attempt + 1))
-                continue
+        try:
+            r = _request_with_retry("POST", f"{NOTION_API}/pages", headers=_headers(token), json_body=body)
+        except (requests.exceptions.Timeout, requests.exceptions.ConnectionError) as exc:
+            print(f"  ERROR: {row.get('ticker')} 投入失敗（{exc}）。スキップして続行します。")
+            time.sleep(0.34)
+            continue
+        if r.status_code in (200, 201):
+            ok += 1
+        else:
             print(f"  ERROR {r.status_code}: {r.text[:300]}")
-            break
         time.sleep(0.34)  # ~3 req/s
     return ok
 
