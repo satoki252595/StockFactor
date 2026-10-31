@@ -88,7 +88,12 @@ def upload(csv_path: str, db_id: str, token: str, date: str, top: int) -> int:
     for row in rows:
         body = {"parent": {"database_id": db_id}, "properties": _row_to_properties(row, date)}
         for attempt in range(3):
-            r = requests.post(f"{NOTION_API}/pages", headers=_headers(token), json=body, timeout=30)
+            try:
+                r = requests.post(f"{NOTION_API}/pages", headers=_headers(token), json=body, timeout=60)
+            except requests.exceptions.RequestException as exc:
+                print(f"  TRANSIENT ERROR (attempt {attempt + 1}/3): {exc}")
+                time.sleep(2 * (attempt + 1))
+                continue
             if r.status_code in (200, 201):
                 ok += 1
                 break
