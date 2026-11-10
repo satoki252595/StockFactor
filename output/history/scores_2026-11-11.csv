@@ -1,0 +1,81 @@
+ticker,name,sector,close,setup_type,n_factors,weighted,rev_score,mom_score,tech,macro,funda,hits
+4410.T,ハリマ化成グループ,化学,1383.0,momentum,12,11.1,5.1,11.1,8,0,4,high_volatility;volume_surge;vol_expansion;small_cap;revenue_growth;earnings_growth;not_overvalued;uptrend_200;trend_aligned;near_highs;positive_rs;momentum_up
+5018.T,ＭＯＲＥＳＣＯ,石油・石炭製品,2727.0,momentum,12,11.1,5.1,11.1,8,0,4,high_volatility;volume_surge;vol_expansion;small_cap;revenue_growth;earnings_growth;not_overvalued;uptrend_200;trend_aligned;near_highs;positive_rs;momentum_up
+4616.T,川上塗料,化学,3860.0,momentum,12,11.1,5.1,11.1,8,0,4,high_volatility;volume_surge;vol_expansion;small_cap;revenue_growth;earnings_growth;not_overvalued;uptrend_200;trend_aligned;near_highs;positive_rs;momentum_up
+9560.T,プログリット,サービス業,992.0,momentum,12,11.1,6.1,11.1,8,0,4,high_volatility;volume_surge;vol_expansion;small_cap;revenue_growth;earnings_growth;not_overvalued;uptrend_200;trend_aligned;near_highs;positive_rs;momentum_up
+4771.T,エフアンドエム,サービス業,3020.0,momentum,12,11.1,5.1,11.1,8,0,4,high_volatility;volume_surge;vol_expansion;small_cap;revenue_growth;earnings_growth;not_overvalued;uptrend_200;trend_aligned;near_highs;positive_rs;momentum_up
+6199.T,セラク,情報・通信業,1521.0,momentum,11,10.8,4.8,10.8,8,0,3,high_volatility;volume_surge;vol_expansion;small_cap;earnings_growth;not_overvalued;uptrend_200;trend_aligned;near_highs;positive_rs;momentum_up
+5029.T,サークレイス,情報・通信業,2014.0,momentum,11,10.8,4.8,10.8,8,0,3,high_volatility;volume_surge;vol_expansion;small_cap;revenue_growth;not_overvalued;uptrend_200;trend_aligned;near_highs;positive_rs;momentum_up
+9888.T,ＵＥＸ,卸売業,1257.0,momentum,11,10.8,5.8,10.8,8,0,3,high_volatility;volume_surge;vol_expansion;small_cap;earnings_growth;not_overvalued;uptrend_200;trend_aligned;near_highs;positive_rs;momentum_up
+4635.T,東京インキ,化学,2247.0,momentum,11,10.8,4.8,10.8,8,0,3,high_volatility;volume_surge;vol_expansion;small_cap;earnings_growth;not_overvalued;uptrend_200;trend_aligned;near_highs;positive_rs;momentum_up
+3932.T,アカツキ,情報・通信業,1300.0,momentum,11,10.8,4.8,10.8,8,0,3,high_volatility;volume_surge;vol_expansion;small_cap;revenue_growth;not_overvalued;uptrend_200;trend_aligned;near_highs;positive_rs;momentum_up
+6445.T,ジャノメ,機械,1474.0,momentum,11,10.8,4.8,10.8,8,0,3,high_volatility;volume_surge;vol_expansion;small_cap;revenue_growth;not_overvalued;uptrend_200;trend_aligned;near_highs;positive_rs;momentum_up
+6196.T,ストライクグループ,サービス業,1783.0,momentum,11,10.6,4.6,10.6,8,0,3,high_volatility;volume_surge;vol_expansion;revenue_growth;earnings_growth;not_overvalued;uptrend_200;trend_aligned;near_highs;positive_rs;momentum_up
+9766.T,コナミグループ,情報・通信業,28555.0,momentum,11,10.6,4.6,10.6,8,0,3,high_volatility;volume_surge;vol_expansion;revenue_growth;earnings_growth;not_overvalued;uptrend_200;trend_aligned;near_highs;positive_rs;momentum_up
+2384.T,ＳＢＳホールディングス,陸運業,5660.0,momentum,11,10.6,4.6,10.6,8,0,3,high_volatility;volume_surge;vol_expansion;revenue_growth;earnings_growth;not_overvalued;uptrend_200;trend_aligned;near_highs;positive_rs;momentum_up
+4475.T,ＨＥＮＮＧＥ,情報・通信業,2340.0,momentum,11,10.6,4.6,10.6,8,0,3,high_volatility;volume_surge;vol_expansion;revenue_growth;earnings_growth;not_overvalued;uptrend_200;trend_aligned;near_highs;positive_rs;momentum_up
+4053.T,Ｓｕｎ　Ａｓｔｅｒｉｓｋ,情報・通信業,554.0,momentum,11,10.1,5.1,10.1,7,0,4,high_volatility;vol_expansion;small_cap;revenue_growth;earnings_growth;not_overvalued;uptrend_200;trend_aligned;near_highs;positive_rs;momentum_up
+6629.T,テクノホライゾン,電気機器,884.0,reversal,11,9.4,9.4,5.1,7,0,4,high_volatility;volume_surge;vol_expansion;small_cap;revenue_growth;earnings_growth;not_overvalued;off_highs;below_sma25;recent_dip;deep_drawdown
+6668.T,アドテック　プラズマ　テクノロジー,電気機器,3385.0,reversal,11,9.4,9.4,8.8,7,0,4,high_volatility;volume_surge;vol_expansion;small_cap;revenue_growth;earnings_growth;not_overvalued;off_highs;below_sma25;recent_dip;deep_drawdown
+6521.T,オキサイド,電気機器,2468.0,reversal,11,9.4,9.4,5.1,7,0,4,high_volatility;volume_surge;vol_expansion;small_cap;revenue_growth;earnings_growth;not_overvalued;off_highs;below_sma25;recent_dip;deep_drawdown
+8070.T,東京産業,卸売業,1052.0,momentum,10,10.5,5.5,10.5,8,0,2,high_volatility;volume_surge;vol_expansion;small_cap;not_overvalued;uptrend_200;trend_aligned;near_highs;positive_rs;momentum_up
+3843.T,フリービット,情報・通信業,1926.0,momentum,10,10.5,4.5,10.5,8,0,2,high_volatility;volume_surge;vol_expansion;small_cap;not_overvalued;uptrend_200;trend_aligned;near_highs;positive_rs;momentum_up
+3920.T,アイビーシー,情報・通信業,1404.0,momentum,10,10.5,4.5,10.5,8,0,2,high_volatility;volume_surge;vol_expansion;small_cap;not_overvalued;uptrend_200;trend_aligned;near_highs;positive_rs;momentum_up
+4228.T,積水化成品工業,化学,675.0,momentum,10,10.5,4.5,10.5,8,0,2,high_volatility;volume_surge;vol_expansion;small_cap;not_overvalued;uptrend_200;trend_aligned;near_highs;positive_rs;momentum_up
+3001.T,片倉工業,繊維製品,3945.0,momentum,10,10.3,4.3,10.3,8,0,2,high_volatility;volume_surge;vol_expansion;earnings_growth;not_overvalued;uptrend_200;trend_aligned;near_highs;positive_rs;momentum_up
+4611.T,大日本塗料,化学,1780.0,momentum,10,10.3,4.3,10.3,8,0,2,high_volatility;volume_surge;vol_expansion;earnings_growth;not_overvalued;uptrend_200;trend_aligned;near_highs;positive_rs;momentum_up
+4220.T,リケンテクノス,化学,2471.0,momentum,10,10.3,4.3,10.3,8,0,2,high_volatility;volume_surge;vol_expansion;earnings_growth;not_overvalued;uptrend_200;trend_aligned;near_highs;positive_rs;momentum_up
+4565.T,ネクセラファーマ,医薬品,1704.0,momentum,10,10.3,4.3,10.3,8,0,2,high_volatility;volume_surge;vol_expansion;revenue_growth;not_overvalued;uptrend_200;trend_aligned;near_highs;positive_rs;momentum_up
+7867.T,タカラトミー,その他製品,5029.0,momentum,10,10.3,4.3,10.3,8,0,2,high_volatility;volume_surge;vol_expansion;earnings_growth;not_overvalued;uptrend_200;trend_aligned;near_highs;positive_rs;momentum_up
+7537.T,丸文,卸売業,1988.0,momentum,10,10.3,4.3,10.3,8,0,2,high_volatility;volume_surge;vol_expansion;earnings_growth;not_overvalued;uptrend_200;trend_aligned;near_highs;positive_rs;momentum_up
+6058.T,ベクトル,サービス業,2225.0,momentum,10,10.3,4.3,10.3,8,0,2,high_volatility;volume_surge;vol_expansion;earnings_growth;not_overvalued;uptrend_200;trend_aligned;near_highs;positive_rs;momentum_up
+6532.T,ベイカレント,サービス業,12765.0,momentum,10,9.6,3.6,9.6,7,0,3,high_volatility;vol_expansion;revenue_growth;earnings_growth;not_overvalued;uptrend_200;trend_aligned;near_highs;positive_rs;momentum_up
+6637.T,寺崎電気産業,電気機器,3475.0,reversal,10,9.1,9.1,4.8,7,0,3,high_volatility;volume_surge;vol_expansion;small_cap;revenue_growth;not_overvalued;off_highs;below_sma25;recent_dip;deep_drawdown
+6779.T,日本電波工業,電気機器,2063.0,reversal,10,9.1,9.1,4.8,7,0,3,high_volatility;volume_surge;vol_expansion;small_cap;earnings_growth;not_overvalued;off_highs;below_sma25;recent_dip;deep_drawdown
+6666.T,リバーエレテック,電気機器,519.0,reversal,10,9.1,9.1,4.8,7,0,3,high_volatility;volume_surge;vol_expansion;small_cap;revenue_growth;not_overvalued;off_highs;below_sma25;recent_dip;deep_drawdown
+6653.T,正興電機製作所,電気機器,1669.0,reversal,10,9.1,9.1,4.8,7,0,3,high_volatility;volume_surge;vol_expansion;small_cap;revenue_growth;not_overvalued;off_highs;below_sma25;recent_dip;deep_drawdown
+6762.T,ＴＤＫ,電気機器,2112.0,reversal,10,8.9,8.9,4.6,7,0,3,high_volatility;volume_surge;vol_expansion;revenue_growth;earnings_growth;not_overvalued;off_highs;below_sma25;recent_dip;deep_drawdown
+6777.T,ｓａｎｔｅｃ　Ｈｏｌｄｉｎｇｓ,電気機器,16190.0,reversal,10,8.9,8.9,4.6,7,0,3,high_volatility;volume_surge;vol_expansion;revenue_growth;earnings_growth;not_overvalued;off_highs;below_sma25;recent_dip;deep_drawdown
+6787.T,メイコー,電気機器,7210.0,reversal,10,8.9,8.9,4.6,7,0,3,high_volatility;volume_surge;vol_expansion;revenue_growth;earnings_growth;not_overvalued;off_highs;below_sma25;recent_dip;deep_drawdown
+6723.T,ルネサスエレクトロニクス,電気機器,2559.5,reversal,10,8.9,8.9,4.6,7,0,3,high_volatility;volume_surge;vol_expansion;revenue_growth;earnings_growth;not_overvalued;off_highs;below_sma25;recent_dip;deep_drawdown
+2760.T,東京エレクトロン　デバイス,卸売業,3525.0,reversal,10,8.9,8.9,5.8,7,0,3,high_volatility;volume_surge;vol_expansion;revenue_growth;earnings_growth;not_overvalued;off_highs;below_sma25;recent_dip;deep_drawdown
+6525.T,ＫＯＫＵＳＡＩ　ＥＬＥＣＴＲＩＣ,電気機器,4876.0,reversal,10,8.9,8.9,4.6,7,0,3,high_volatility;volume_surge;vol_expansion;revenue_growth;earnings_growth;not_overvalued;off_highs;below_sma25;recent_dip;deep_drawdown
+6490.T,ＰＩＬＬＡＲ,機械,8770.0,reversal,10,8.9,8.9,5.8,7,0,3,high_volatility;volume_surge;vol_expansion;revenue_growth;earnings_growth;not_overvalued;off_highs;below_sma25;recent_dip;deep_drawdown
+3023.T,ラサ商事,卸売業,2236.0,momentum,10,8.8,2.8,8.8,7,0,3,volume_surge;vol_expansion;small_cap;earnings_growth;not_overvalued;uptrend_200;trend_aligned;near_highs;positive_rs;momentum_up
+7844.T,マーベラス,情報・通信業,561.0,momentum,10,8.8,2.8,8.8,7,0,3,volume_surge;vol_expansion;small_cap;earnings_growth;not_overvalued;uptrend_200;trend_aligned;near_highs;positive_rs;momentum_up
+7504.T,高速,卸売業,5220.0,momentum,9,10.0,4.0,10.0,8,0,1,high_volatility;volume_surge;vol_expansion;not_overvalued;uptrend_200;trend_aligned;near_highs;positive_rs;momentum_up
+9658.T,ビジネスブレイン太田昭和,情報・通信業,1556.0,momentum,9,10.0,4.0,10.0,8,0,1,high_volatility;volume_surge;vol_expansion;not_overvalued;uptrend_200;trend_aligned;near_highs;positive_rs;momentum_up
+3399.T,丸千代山岡家,小売業,5860.0,momentum,9,10.0,4.0,10.0,8,0,1,high_volatility;volume_surge;vol_expansion;not_overvalued;uptrend_200;trend_aligned;near_highs;positive_rs;momentum_up
+3563.T,ＦＯＯＤ　＆　ＬＩＦＥ　ＣＯＭＰＡＮＩＥＳ,小売業,5621.0,momentum,9,10.0,4.0,10.0,8,0,1,high_volatility;volume_surge;vol_expansion;not_overvalued;uptrend_200;trend_aligned;near_highs;positive_rs;momentum_up
+6737.T,ＥＩＺＯ,電気機器,2783.0,momentum,9,9.5,6.3,9.5,7,0,2,high_volatility;volume_surge;vol_expansion;earnings_growth;not_overvalued;uptrend_200;trend_aligned;near_highs;positive_rs
+6644.T,大崎電気工業,電気機器,1070.0,reversal,9,8.8,8.8,4.5,7,0,2,high_volatility;volume_surge;vol_expansion;small_cap;not_overvalued;off_highs;below_sma25;recent_dip;deep_drawdown
+3835.T,ｅＢＡＳＥ,情報・通信業,333.0,reversal,9,8.8,8.8,5.7,7,0,2,high_volatility;volume_surge;vol_expansion;small_cap;not_overvalued;off_highs;below_sma25;recent_dip;deep_drawdown
+3798.T,ＵＬＳグループ,情報・通信業,486.0,reversal,9,8.8,8.8,4.5,7,0,2,high_volatility;volume_surge;vol_expansion;small_cap;not_overvalued;off_highs;below_sma25;recent_dip;deep_drawdown
+3788.T,ＧＭＯグローバルサイン・ホールディングス,情報・通信業,1809.0,reversal,9,8.8,8.8,5.7,7,0,2,high_volatility;volume_surge;vol_expansion;small_cap;not_overvalued;off_highs;below_sma25;recent_dip;deep_drawdown
+3776.T,ブロードバンドタワー,情報・通信業,206.0,reversal,9,8.8,8.8,5.7,7,0,2,high_volatility;volume_surge;vol_expansion;small_cap;not_overvalued;off_highs;below_sma25;recent_dip;deep_drawdown
+6656.T,インスペック,電気機器,522.0,reversal,9,8.8,8.8,4.5,7,0,2,high_volatility;volume_surge;vol_expansion;small_cap;not_overvalued;off_highs;below_sma25;recent_dip;deep_drawdown
+7760.T,ＩＭＶ,精密機器,1876.0,reversal,9,8.8,8.8,4.5,7,0,2,high_volatility;volume_surge;vol_expansion;small_cap;not_overvalued;off_highs;below_sma25;recent_dip;deep_drawdown
+4055.T,ティアンドエスグループ,情報・通信業,1199.0,reversal,9,8.8,8.8,4.5,7,0,2,high_volatility;volume_surge;vol_expansion;small_cap;not_overvalued;off_highs;below_sma25;recent_dip;deep_drawdown
+4100.T,戸田工業,化学,1545.0,reversal,9,8.8,8.8,6.7,7,0,2,high_volatility;volume_surge;vol_expansion;small_cap;not_overvalued;off_highs;below_sma25;recent_dip;deep_drawdown
+6752.T,パナソニック　ホールディングス,電気機器,2974.5,reversal,9,8.6,8.6,4.3,7,0,2,high_volatility;volume_surge;vol_expansion;earnings_growth;not_overvalued;off_highs;below_sma25;recent_dip;deep_drawdown
+6754.T,アンリツ,電気機器,2173.0,reversal,9,8.6,8.6,4.3,7,0,2,high_volatility;volume_surge;vol_expansion;revenue_growth;not_overvalued;off_highs;below_sma25;recent_dip;deep_drawdown
+6645.T,オムロン,電気機器,4821.0,reversal,9,8.6,8.6,4.3,7,0,2,high_volatility;volume_surge;vol_expansion;earnings_growth;not_overvalued;off_highs;below_sma25;recent_dip;deep_drawdown
+6617.T,東光高岳,電気機器,4685.0,reversal,9,8.6,8.6,4.3,7,0,2,high_volatility;volume_surge;vol_expansion;earnings_growth;not_overvalued;off_highs;below_sma25;recent_dip;deep_drawdown
+2802.T,味の素,食料品,4430.0,reversal,9,8.6,8.6,4.3,7,0,2,high_volatility;volume_surge;vol_expansion;earnings_growth;not_overvalued;off_highs;below_sma25;recent_dip;deep_drawdown
+4109.T,ステラ　ケミファ,化学,4280.0,reversal,9,8.6,8.6,4.3,7,0,2,high_volatility;volume_surge;vol_expansion;earnings_growth;not_overvalued;off_highs;below_sma25;recent_dip;deep_drawdown
+3028.T,アルペン,小売業,2565.0,momentum,9,8.3,2.3,8.3,7,0,2,volume_surge;vol_expansion;earnings_growth;not_overvalued;uptrend_200;trend_aligned;near_highs;positive_rs;momentum_up
+3774.T,インターネットイニシアティブ,情報・通信業,3843.0,momentum,9,8.3,2.3,8.3,7,0,2,volume_surge;vol_expansion;revenue_growth;not_overvalued;uptrend_200;trend_aligned;near_highs;positive_rs;momentum_up
+6758.T,ソニーグループ,電気機器,4297.0,momentum,9,8.3,2.3,8.3,7,0,2,volume_surge;vol_expansion;earnings_growth;not_overvalued;uptrend_200;trend_aligned;near_highs;positive_rs;momentum_up
+7956.T,ピジョン,その他製品,2281.0,momentum,9,8.3,2.3,8.3,7,0,2,volume_surge;vol_expansion;earnings_growth;not_overvalued;uptrend_200;trend_aligned;near_highs;positive_rs;momentum_up
+7947.T,エフピコ,化学,3175.0,momentum,9,8.3,2.3,8.3,7,0,2,volume_surge;vol_expansion;earnings_growth;not_overvalued;uptrend_200;trend_aligned;near_highs;positive_rs;momentum_up
+2801.T,キッコーマン,食料品,1862.5,momentum,9,8.3,2.3,8.3,7,0,2,volume_surge;vol_expansion;earnings_growth;not_overvalued;uptrend_200;trend_aligned;near_highs;positive_rs;momentum_up
+6745.T,ホーチキ,電気機器,1988.0,momentum,8,9.0,5.0,9.0,7,0,1,high_volatility;volume_surge;vol_expansion;not_overvalued;uptrend_200;trend_aligned;near_highs;momentum_up
+2805.T,ヱスビー食品,食料品,7580.0,momentum,8,8.8,4.0,8.8,7,0,1,high_volatility;volume_surge;vol_expansion;not_overvalued;uptrend_200;near_highs;positive_rs;momentum_up
+7776.T,セルシード,精密機器,165.0,reversal,8,8.6,8.6,4.3,7,0,1,high_volatility;volume_surge;vol_expansion;small_cap;off_highs;below_sma25;recent_dip;deep_drawdown
+6620.T,宮越ホールディングス,不動産業,568.0,reversal,8,8.6,8.6,4.3,7,0,1,high_volatility;volume_surge;vol_expansion;small_cap;off_highs;below_sma25;recent_dip;deep_drawdown
+3762.T,テクマトリックス,情報・通信業,3080.0,momentum,8,8.5,5.0,8.5,7,0,1,high_volatility;volume_surge;vol_expansion;not_overvalued;uptrend_200;trend_aligned;positive_rs;momentum_up
+6707.T,サンケン電気,電気機器,5306.0,reversal,8,8.3,8.3,4.0,7,0,1,high_volatility;volume_surge;vol_expansion;not_overvalued;off_highs;below_sma25;recent_dip;deep_drawdown
+6703.T,沖電気工業,電気機器,2323.0,reversal,8,8.3,8.3,4.0,7,0,1,high_volatility;volume_surge;vol_expansion;not_overvalued;off_highs;below_sma25;recent_dip;deep_drawdown
+4061.T,デンカ,化学,2892.5,reversal,8,8.3,8.3,4.0,7,0,1,high_volatility;volume_surge;vol_expansion;not_overvalued;off_highs;below_sma25;recent_dip;deep_drawdown
+4078.T,堺化学工業,化学,3160.0,reversal,8,8.3,8.3,4.0,7,0,1,high_volatility;volume_surge;vol_expansion;not_overvalued;off_highs;below_sma25;recent_dip;deep_drawdown
+2767.T,円谷フィールズホールディングス,卸売業,2425.0,momentum,8,8.0,3.0,8.0,7,0,1,volume_surge;vol_expansion;not_overvalued;uptrend_200;trend_aligned;near_highs;positive_rs;momentum_up
